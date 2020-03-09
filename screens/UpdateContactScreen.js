@@ -22,6 +22,7 @@ import Contact from '../models/Contact';
 
 const UpdateContactScreen = props => {
 
+  const [isCurrentContactLoaded, setisCurrentContactLoaded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [contactName, setContactName] = useState('');
   const [contactMobile, setContactMobile] = useState('');
@@ -46,15 +47,18 @@ const UpdateContactScreen = props => {
 
     props.navigation.setParams({toggleFav: toggleFavorite, isFav: isFavorite}); 
 
-    var indexFound = favContacts.map(function(x) {return x.id; }).indexOf(currentContact.id);
-    if(indexFound >= 0)
-    {
-      setIsFavorite(true);
+    if(!isCurrentContactLoaded){
+      var indexFound = favContacts.map(function(x) {return x.id; }).indexOf(currentContact.id);
+      if(indexFound >= 0)
+      {
+        setIsFavorite(true);
+      }
+      setContactLandline(currentContact.landLine);
+      setContactImageUri(currentContact.imageUri);
+      setContactMobile(currentContact.mobile);
+      setContactName(currentContact.name);
+      setisCurrentContactLoaded(true);
     }
-    setContactLandline(currentContact.landLine);
-    setContactImageUri(currentContact.imageUri);
-    setContactMobile(currentContact.mobile);
-    setContactName(currentContact.name);
   
   }, [isFavorite]);
 
@@ -67,7 +71,6 @@ const UpdateContactScreen = props => {
     else{
       setIsFavorite(true);
     }
-    console.log(props.navigation.headerRight);
   }
 
   const getFavImage = () => {
