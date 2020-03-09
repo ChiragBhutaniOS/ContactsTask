@@ -29,6 +29,14 @@ const AddContactScreen = props => {
   const [contactLandline, setContactLandline] = useState('');
   const [contactImageUri, setContactImageUri] = useState('');
 
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+
+    props.navigation.setParams({toggleFav: toggleFavorite, isFav: isFavorite}); 
+  
+  }, [isFavorite]);
+
+
   const toggleFavorite = () => {
 
     if(isFavorite)
@@ -37,16 +45,6 @@ const AddContactScreen = props => {
     }
     else{
       setIsFavorite(true);
-    }
-  }
-
-  const getFavImage = () => {
-    if(isFavorite)
-    {
-      return require('../images/icon_star_enabled.png');
-    }
-    else{
-      return require('../images/icon_star_disabled.png');
     }
   }
 
@@ -119,16 +117,9 @@ const AddContactScreen = props => {
     }}>
         <View style = {styles.screen} >
 
-        <View style = {styles.favIcon}>
-          <TouchableOpacity activeOpacity={0.5} onPress={toggleFavorite} >
-            <Image source={getFavImage()}/>
-          </TouchableOpacity>
-        </View>
-
-
-          <TouchableOpacity activeOpacity={0.5} onPress={onCameraPressed} style={styles.cameraIcon} >
+          <TouchableOpacity activeOpacity={0.5} onPress={onCameraPressed} style={styles.cameraIconOpacity} >
           <Image source={getUserImage()} 
-          style={styles.CameraButtonStyle} />
+          style={styles.CameraIcon} />
           </TouchableOpacity>
 
           <View style = {styles.contactInputContainer}>
@@ -170,14 +161,15 @@ const AddContactScreen = props => {
 AddContactScreen.navigationOptions = navigationData => {
 
   const toggleFavorite = navigationData.navigation.getParam('toggleFav');
+  const isFavorite = navigationData.navigation.getParam('isFav');
 
   return{
-    headerTitle: 'Add Contact'
-    // headerRight: (  
-    //   <TouchableOpacity onPress = {toggleFavorite}>
-    //   <Image source = {require('../images/icon_star_disabled.png')}/>
-    //   </TouchableOpacity>          
-    // )
+    headerTitle: 'Add Contact',  
+    headerRight: (  
+      <TouchableOpacity onPress = {toggleFavorite}>
+      <Image source = {isFavorite ? require('../images/icon_star_enabled.png') : require('../images/icon_star_disabled.png')}/>
+      </TouchableOpacity>          
+    )
   }
 };
 
@@ -186,23 +178,17 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center'
     },
-    favIcon:{
-      width : '100%',
-      height : 32,
-      flexDirection: 'row',
-      justifyContent : 'flex-end'
-    },
-    cameraIcon:{
-
+    cameraIconOpacity:{
       marginTop : '20%',
       marginBottom : 40,
-      borderRadius : 60,
+      borderRadius : 80/2,
       borderColor : 'gray',
       borderWidth : 1,
     },
-    CameraButtonStyle:{
-      width: 120,
-      height: 120,
+    CameraIcon:{
+      width: 80,
+      height: 80,
+      borderRadius : 60,
     },
     contactText:{
       width : 80,

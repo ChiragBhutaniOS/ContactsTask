@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   Image,
+  Alert,
   Button,
   FlatList,
   StyleSheet,
@@ -21,7 +22,7 @@ import Contact from '../models/Contact';
 
 const UpdateContactScreen = props => {
 
-  const [isFavorite, setIsFavorite] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false);
   const [contactName, setContactName] = useState('');
   const [contactMobile, setContactMobile] = useState('');
   const [contactLandline, setContactLandline] = useState('');
@@ -43,6 +44,8 @@ const UpdateContactScreen = props => {
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
 
+    props.navigation.setParams({toggleFav: toggleFavorite, isFav: isFavorite}); 
+
     var indexFound = favContacts.map(function(x) {return x.id; }).indexOf(currentContact.id);
     if(indexFound >= 0)
     {
@@ -53,7 +56,7 @@ const UpdateContactScreen = props => {
     setContactMobile(currentContact.mobile);
     setContactName(currentContact.name);
   
-  }, []);
+  }, [isFavorite]);
 
   const toggleFavorite = () => {
 
@@ -64,6 +67,7 @@ const UpdateContactScreen = props => {
     else{
       setIsFavorite(true);
     }
+    console.log(props.navigation.headerRight);
   }
 
   const getFavImage = () => {
@@ -152,15 +156,9 @@ const UpdateContactScreen = props => {
 
       <View style = {styles.screen} >
 
-        <View style = {styles.favIcon}>
-          <TouchableOpacity activeOpacity={0.5} onPress={toggleFavorite} >
-            <Image source={getFavImage()}/>
-          </TouchableOpacity>
-        </View>
-
-          <TouchableOpacity activeOpacity={0.5} onPress={onCameraPressed} style={styles.cameraIcon} >
+          <TouchableOpacity activeOpacity={0.5} onPress={onCameraPressed} style={styles.cameraIconOpacity} >
           <Image source={getUserImage()} 
-          style={styles.CameraButtonStyle} />
+          style={styles.CameraIcon} />
           </TouchableOpacity>
 
           <View style = {styles.contactInputContainer}>
@@ -200,15 +198,19 @@ const UpdateContactScreen = props => {
     )
 };
 
-UpdateContactScreen.navigationOptions =  {
-  headerTitle: 'Update Contact'
-  // headerRight: (  
-  //   <TouchableOpacity onPress = {() => {
-      
-  //   }}>
-  //   <Image source = {require('../images/icon_star_disabled.png')}/>
-  //   </TouchableOpacity>          
-  // )
+UpdateContactScreen.navigationOptions = navigationData => {
+  
+  const toggleFavorite = navigationData.navigation.getParam('toggleFav');
+  const isFavorite = navigationData.navigation.getParam('isFav');
+  
+  return{
+    headerTitle: 'Update Contact',  
+    headerRight: (  
+      <TouchableOpacity onPress = {toggleFavorite}>
+      <Image source = {isFavorite ? require('../images/icon_star_enabled.png') : require('../images/icon_star_disabled.png')}/>
+      </TouchableOpacity>          
+    )
+  }
 };
 
 const styles = StyleSheet.create({
@@ -216,23 +218,16 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center'
     },
-    favIcon:{
-      width : '100%',
-      height : 32,
-      flexDirection: 'row',
-      justifyContent : 'flex-end'
-    },
-    cameraIcon:{
-
+    cameraIconOpacity:{
       marginTop : '20%',
       marginBottom : 40,
-      borderRadius : 60,
+      borderRadius : 80/2,
       borderColor : 'gray',
       borderWidth : 1,
     },
-    CameraButtonStyle:{
-      width: 120,
-      height: 120,
+    CameraIcon:{
+      width: 80,
+      height: 80,
     },
     contactText:{
       width : 80,
