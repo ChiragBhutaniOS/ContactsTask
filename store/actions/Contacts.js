@@ -21,8 +21,8 @@ export const addContact = (newContact, isFav) => {
     return { type: ADD_CONTACT, contactToAdd: newContact, isFavorite: isFav};
 };
 
-export const updateContact = (updatedContact) => {
-    return { type: UPDATE_CONTACT, contactToUpdate : updatedContact};
+export const updateContact = (updatedContact, isFav) => {
+    return { type: UPDATE_CONTACT, contactToUpdate : updatedContact, isFavorite: isFav};
 };
 
 export const deleteContact = (id) => {

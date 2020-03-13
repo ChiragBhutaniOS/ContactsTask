@@ -46,13 +46,6 @@ const FavContactListScreen = props => {
         data={Contacts.sort(compare)}
         renderItem={renderContactListItem}
         />
-        <TouchableOpacity activeOpacity={0.5} onPress={onAddContactPressed} style={styles.TouchableOpacityStyle} >
-  
-        <Image source={{uri : 'https://reactnativecode.com/wp-content/uploads/2017/11/Floating_Button.png'}} 
-        
-        style={styles.FloatingButtonStyle} />
-    
-      </TouchableOpacity>
     </View>
 
    )

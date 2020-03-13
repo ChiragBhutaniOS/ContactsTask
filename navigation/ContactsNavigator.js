@@ -1,6 +1,5 @@
 
 import ContactListScreen from '../screens/ContactListScreen';
-import AddContactScreen from '../screens/AddContactScreen';
 import UpdateContactScreen from '../screens/UpdateContactScreen';
 import FavContactListScreen from '../screens/FavContactListScreen';
 import Colors from '../constants/Colors'
@@ -17,7 +16,6 @@ const defaultStackNavOptions = {
 const ContactsNavigator = createStackNavigator(
     {
     ContactList : ContactListScreen,
-    AddContact : AddContactScreen,
     UpdateContact : UpdateContactScreen
 },
 {
@@ -41,10 +39,15 @@ const MainNavigator = createDrawerNavigator(
       contactList: {
         screen: ContactsNavigator,
         navigationOptions: {
-          drawerLabel: 'Contacts'
+          drawerLabel: 'Contact list screen'
         }
       },
-      FavoriteList: FavContactsNavigator
+      Favorite: {
+        screen: FavContactsNavigator,
+        navigationOptions: {
+          drawerLabel: 'Favorite list'
+        }
+      }
     },
     {
       contentOptions: {

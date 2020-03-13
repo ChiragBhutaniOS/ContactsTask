@@ -32,7 +32,18 @@ const contactsReducer = (state = initialState, action) => {
             var indexToUpdateFav = updatedFavContacts.map(function(x) {return x.id; }).indexOf(action.contactToUpdate.id);
             if(indexToUpdateFav >= 0)
             {
-                updatedFavContacts[indexToUpdateFav] = action.contactToUpdate;
+                if(!action.isFavorite){
+                    updatedFavContacts.splice(indexToUpdateFav, 1);
+                }
+                else{
+                    updatedFavContacts[indexToUpdateFav] = action.contactToUpdate;
+                }
+            }
+            else{
+                if(action.isFavorite)
+                {
+                    updatedFavContacts.push(action.contactToUpdate);
+                }
             }
             return { ...state, contacts: updatedContacts, favContacts: updatedFavContacts};
         case DELETE_CONTACT:

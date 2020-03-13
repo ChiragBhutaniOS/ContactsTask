@@ -17,6 +17,7 @@ const ContactListScreen = props => {
 
   const Contacts  = useSelector(state => state.contacts.contacts);
 
+  // Sorting list in ascending order
   const compare = (a, b) => {
     // Use toUpperCase() to ignore character casing
     const nameA = a.name.toUpperCase();
@@ -31,21 +32,19 @@ const ContactListScreen = props => {
     return comparison;
   }
 
-  // const getContactById = id => {
-  //   const contact = Contacts.filter((contact) => {
-  //     return id === contact.id;
-  //   });
-  //   console.log('Found contact is:', contact);
-  // }
-  // getContactById(15833158957557777);
-  
+  // Handle add contact button 
   onAddContactPressed = () =>{
 
     props.navigation.navigate({
-      routeName: 'AddContact'
+      routeName: 'UpdateContact',
+      params: {
+        indexSelected: -1,
+        isEditing : false
+      }
       });
   }
 
+  // Render list item for flat list
   const renderContactListItem = itemData =>{
     return(
       <ContactListItem 
@@ -55,7 +54,8 @@ const ContactListScreen = props => {
           props.navigation.navigate({
             routeName: 'UpdateContact',
             params: {
-              indexSelected: itemData.index
+              indexSelected: itemData.index,
+              isEditing : true
             }
           });
         }
